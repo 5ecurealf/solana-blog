@@ -12,7 +12,7 @@ export const Dashboard = () => {
   const { connected, select } = useWallet();
   const [postTitle, setPostTitle] = useState("");
   const [postContent, setPostContent] = useState("");
-  const { user } = useBlog();
+  const { user, initialised } = useBlog();
 
   // // Static Data
   // const user = {
@@ -20,6 +20,7 @@ export const Dashboard = () => {
   //   avatar: "https://avatarfiles.alphacoders.com/283/thumb-283778.jpg",
   // };
   // const connected = true
+  // const initialised = true;
   const posts = [];
 
   const createPost = () => {};
@@ -62,14 +63,25 @@ export const Dashboard = () => {
                 className="w-8 h-8 rounded-full bg-gray-200 shadow ring-2 ring-indigo-400 ring-offset-2 ring-opacity-50"
               />
               <p className=" font-bold text-sm ml-2 capitalize">{user?.name}</p>
-              <Button
-                className="ml-3 mr-2"
-                onClick={() => {
-                  setShowModal(true);
-                }}
-              >
-                Create Post
-              </Button>
+              {initialised ? (
+                <Button
+                  className="ml-3 mr-2"
+                  onClick={() => {
+                    setShowModal(true);
+                  }}
+                >
+                  Create Post
+                </Button>
+              ) : (
+                <Button
+                  className="ml-3 mr-2"
+                  onClick={() => {
+                    setShowModal(true);
+                  }}
+                >
+                  Initialise User
+                </Button>
+              )}
             </div>
           ) : (
             <Button
