@@ -12,8 +12,15 @@ export const Dashboard = () => {
   const { connected, select } = useWallet();
   const [postTitle, setPostTitle] = useState("");
   const [postContent, setPostContent] = useState("");
-  const { user, initialised, initUser, showModal, setShowModal, createPost } =
-    useBlog();
+  const {
+    user,
+    initialised,
+    initUser,
+    showModal,
+    setShowModal,
+    createPost,
+    posts,
+  } = useBlog();
 
   // // Static Data
   // const user = {
@@ -22,7 +29,6 @@ export const Dashboard = () => {
   // };
   // const connected = true
   // const initialised = true;
-  const posts = [];
 
   /////////////////
 
