@@ -30,6 +30,7 @@ export const BlogProvider = ({ children }) => {
   const [user, setUser] = useState();
   const [initialised, setInitialised] = useState(false);
   const [transactionPending, setTransactionPending] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
   // const user = {
   //   name: "Alfie",
@@ -107,7 +108,9 @@ export const BlogProvider = ({ children }) => {
   };
 
   return (
-    <BlogContext.Provider value={{ user, initialised, initUser }}>
+    <BlogContext.Provider
+      value={{ user, initialised, initUser, showModal, setShowModal }}
+    >
       {children}
     </BlogContext.Provider>
   );
