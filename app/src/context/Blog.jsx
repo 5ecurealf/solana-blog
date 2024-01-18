@@ -27,8 +27,9 @@ export const useBlog = () => {
 };
 
 export const BlogProvider = ({ children }) => {
-  const [user, setUser] = useState({});
+  const [user, setUser] = useState();
   const [initialised, setInitialised] = useState(false);
+  const [transactionPending, setTransactionPending] = useState(false);
 
   // const user = {
   //   name: "Alfie",
@@ -56,32 +57,57 @@ export const BlogProvider = ({ children }) => {
 
   useEffect(() => {
     const start = async () => {
-      console.log("Starting app and fetching data");
       if (program && publicKey) {
         try {
-          // check if there is a user account
           const [userPda] = await findProgramAddressSync(
             [utf8.encode("user"), publicKey.toBuffer()],
             program.programId
           );
           const user = await program.account.userAccount.fetch(userPda);
-          console.log(user);
           if (user) {
-            setInitialised(true); // Create a post button should display if initialised = true
+            setInitialised(true);
+            setUser(user);
           }
-        } catch (err) {
-          console.log("No user");
-          setInitialised(false); // initialise user otherwise
+        } catch (error) {
+          console.log(error);
+          setInitialised(false);
         }
       }
     };
-    // check if there is a user
 
     start();
-  }, []);
+  }, [program, publicKey, transactionPending]);
+
+  const initUser = async () => {
+    if (program && publicKey) {
+      try {
+        setTransactionPending(true);
+        const name = getRandomName();
+        const avatar = getAvatarUrl(name);
+        const [userPda] = await findProgramAddressSync(
+          [utf8.encode("user"), publicKey.toBuffer()],
+          program.programId
+        );
+
+        await program.methods
+          .initUser(name, avatar)
+          .accounts({
+            userAccount: userPda,
+            authority: publicKey,
+            systemProgram: SystemProgram.programId,
+          })
+          .rpc();
+        setInitialised(true);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setTransactionPending(false);
+      }
+    }
+  };
 
   return (
-    <BlogContext.Provider value={{ user, initialised }}>
+    <BlogContext.Provider value={{ user, initialised, initUser }}>
       {children}
     </BlogContext.Provider>
   );

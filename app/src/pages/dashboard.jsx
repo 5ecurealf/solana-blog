@@ -12,7 +12,7 @@ export const Dashboard = () => {
   const { connected, select } = useWallet();
   const [postTitle, setPostTitle] = useState("");
   const [postContent, setPostContent] = useState("");
-  const { user, initialised } = useBlog();
+  const { user, initialised, initUser } = useBlog();
 
   // // Static Data
   // const user = {
@@ -76,7 +76,7 @@ export const Dashboard = () => {
                 <Button
                   className="ml-3 mr-2"
                   onClick={() => {
-                    setShowModal(true);
+                    initUser();
                   }}
                 >
                   Initialise User
